@@ -130,10 +130,22 @@ function draw(data, bounds) {
 function update() {
     layout.font('impact').spiral('archimedean');
     fontSize = d3.scale['sqrt']().range([10, 40]);
-    if (filteredData.length){
-        fontSize.domain([+filteredData[filteredData.length - 1][year] || 1, +filteredData[0].[year]]);
+    console.log(filteredData);
+    if (filteredData.length ==0) {
+    	console.log("In the IF");
+	 var text2 = vis.append("svg:text")
+    .attr("x", 110)
+	 .attr("y", 120)
+    .attr("font-size", "35")
+    .attr("font-weight", "bold")
+    .attr("fill", "red")
+    .text("No Data");    
     }
-    layout.stop().words(filteredData).start();
+    else {if (filteredData.length){
+        fontSize.domain([+filteredData[filteredData.length - 1][year] || 1, +filteredData[0][year]]);
+    }
+    layout.stop().words(filteredData).start();}
+    
 }
 
 }

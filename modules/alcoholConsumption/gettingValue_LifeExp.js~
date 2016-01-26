@@ -1,0 +1,87 @@
+function getValueLEFemale(year,country){
+
+
+var BMIfemale;
+
+//Loading data
+d3.csv("HNP_Data_LifeExpectancy.csv", function(data) {
+	
+var filteredData;
+
+  data.forEach(function(d) {
+    d[year] = +d[year]
+    });
+    
+//Filtering data
+         
+    filteredData = data.filter(function(d) { 
+        if(d["Country"] == country && d["Indicator Code"] == "SP.DYN.LE00.FE.IN" )
+        { 
+        return d[year];
+  		  } 
+    });
+  
+  var LEfem = d3.max(filteredData, function(d) { return +d[year];} );
+  if(typeof LEfem === 'undefined'){
+  displayLEfemale("No data");
+  }
+  else {
+  displayLEfemale(LEfem);}
+  }); 
+  
+}
+
+
+
+function getValueLEMale(year,country){
+var BMImale;
+
+//Loading data
+d3.csv("HNP_Data_LifeExpectancy.csv", function(data) {
+	
+	var filteredData;
+  data.forEach(function(d) {
+    d[year] = +d[year]
+    });
+    
+//Filtering data
+         
+    filteredData = data.filter(function(d) { 
+        if(d["Country"] == country && d["Indicator Code"] == "SP.DYN.LE00.MA.IN" )
+        { 
+        return d[year];
+        } 
+    });
+   var LEmal = d3.max(filteredData, function(d) { return +d[year];} );
+  displayLEmale(LEmal);
+  });
+  
+}
+
+function displayLEfemale(LEfemale){
+var svgContainer = d3.select("body").append("svg")
+                                    .attr("width", 300)
+                                    .attr("height", 50);
+               
+var textLE = svgContainer.append("svg:text")
+    .attr("x", 0)
+	 .attr("y", 20)
+    .attr("font-size", "15")
+    .attr("font-weight", "bold")
+    .attr("fill", "red")
+    .text("Life Expectancy (female) "+LEfemale); 
+}
+
+function displayLEmale(LEmale){
+var svgContainer = d3.select("body").append("svg")
+                                    .attr("width", 300)
+                                    .attr("height", 50);
+                
+var textLE = svgContainer.append("svg:text")
+    .attr("x", 0)
+	 .attr("y", 20)
+    .attr("font-size", "15")
+    .attr("font-weight", "bold")
+    .attr("fill", "red")
+    .text("Life Expectancy (male) "+LEmale); 
+}
