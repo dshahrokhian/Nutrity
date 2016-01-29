@@ -1,6 +1,5 @@
 function wordCloud(year,country){
 
-//stefano's code
 
  var filteredData;
 
@@ -38,20 +37,20 @@ d3.csv("foodPerCountry_MOD.csv", function(data) {
   console.log(scaled(max));    
   console.log(filteredData[0]);
   
-update();
+update(max);
 
-window.onresize = function(event) {
+/*window.onresize = function(event) {
     update();
-};
+};*/
   
 });
-//end of stefano's code
+
 
 
 var fill = d3.scale.category20b();
 
-var w = 800,
-        h = 700;
+var w = 400,
+        h = 300;
 
 var max,
         fontSize;
@@ -68,18 +67,22 @@ var layout = d3.layout.cloud()
         })
         .on("end", draw);
 
-var svg = d3.select("#vis").append("svg")
+/*var svg = d3.select("#mainSVG").append("svg")
         .attr("width", w)
-        .attr("height", h);
+        .attr("height", h);*/
+var svg = d3.select("#mainSVG").append("g").attr("transform", "translate(-5,50)");        
+        
+var svgContainer = svg.append("svg")
+                                    .attr("width", 400)
+                                    .attr("height", 300);
 
-var vis = svg.append("g").attr("transform", "translate(" + [w >> 1, h >> 1] + ")");
+var vis = svgContainer.append("g").attr("transform", "translate(" + [w >> 1, h >> 1] + ")");
 
-//UPDATE HERE
 
 
 function draw(data, bounds) {
-    var w = window.innerWidth,
-        h = window.innerHeight;
+    var w = 400,
+        h = 300;
 
     svg.attr("width", w).attr("height", h);
 
@@ -127,15 +130,16 @@ function draw(data, bounds) {
 }
 
 
-function update() {
+function update(max) {
     layout.font('impact').spiral('archimedean');
-    fontSize = d3.scale['sqrt']().range([10, 40]);
+    fontSize = d3.scale['sqrt']().range([8, 25]);
     console.log(filteredData);
-    if (filteredData.length ==0) {
-    	console.log("In the IF");
+    if (typeof max === 'undefined' || max === 0) {
+    //if (filteredData.lenght==0) {
+    	console.log("No data for wordcloud");
 	 var text2 = vis.append("svg:text")
-    .attr("x", 110)
-	 .attr("y", 120)
+    .attr("x", -100)
+	 .attr("y", 50)
     .attr("font-size", "35")
     .attr("font-weight", "bold")
     .attr("fill", "red")

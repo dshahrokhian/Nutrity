@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script type="text/javascript" src="modules/LE/gettingValue_LifeExp.js"></script>
+    <script type="text/javascript" src="bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="bower_components/d3-cloud/d3.layout.cloud.js"></script>
+    <script type="text/javascript" src="modules/ALC/gettingValue_Alcohol.js"></script>
+    <script src="modules/ALC/liquidFillGaugeAlc.js" language="JavaScript"></script>
+    <script src="modules/BMI/liquidFillGaugeMale.js" language="JavaScript"></script>
+    <script src="modules/BMI/liquidFillGaugeFemale.js" language="JavaScript"></script>
+    <script type="text/javascript" src="modules/BMI/gettingValue.js"></script>
+    <script type="text/javascript" src="modules/Wordcloud/word-cloud.js"></script>
+    <script type="text/javascript" src="modules/other/others.js"></script>
+    
+    <style>
+        .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+    </style>
+<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+<!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script> -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+<script src="modules/map/dist/datamaps.world.min.js"></script>
+</head>
+<body>
+<div id="container" class="container" style="position: relative; width: 1280px; height: 720px; margin:0 auto; background-color: #D8D8D7">
+<!-- <svg id="mainSVG" width="1000" height="450"></svg> -->
+</div>
+  <script>
+
+var map = new Datamap({
+    element: document.getElementById("container"),
+    projection: 'mercator',
+    fills: {
+        defaultFill: "#183B73",
+        authorHasTraveledTo: "#fa0fa0"
+    },
+    data: {
+        // USA: { fillKey: "authorHasTraveledTo" },
+        // JPN: { fillKey: "authorHasTraveledTo" },
+    },
+    geographyConfig: {
+        highlightFillColor: '#217ABF',
+        highlightBorderColor: '#183B73',
+    },
+    done: function(datamap) {
+        datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+
+            map.selectedCountry(geography.properties.name);
+        });
+    }
+});
+
+   var config6 = liquidFillGaugeDefaultSettingsAlc();
+    config6.waveTextColor = "blue";
+    config6.textVertPosition = -0.3 ;
+    config6.waveAnimateTime = 1000;
+    
+   <!--Female definition-->
+   var config3 = liquidFillGaugeDefaultSettingsFe();
+    config3.waveTextColor = "red";
+    config3.textVertPosition = -0.3 ;
+    config3.waveAnimateTime = 1000;
+   <!--Male definition-->
+   var config1 = liquidFillGaugeDefaultSettings();
+    config1.waveTextColor = "red";
+    config1.textVertPosition = -0.3 ;
+    config1.waveAnimateTime = 1000;
+
+map.addPlugin('selectedCountry', function(layer, country) {
+
+var svgNS = "http://www.w3.org/2000/svg";
+
+var  use = document.createElementNS(svgNS, "g");
+
+use.setAttribute("id", "mainSVG")
+use.setAttribute("width", 1000)
+use.setAttribute("height", 450)
+use.setAttribute("fill", "white")
+use.setAttribute("opacity", "1")
+use.setAttribute("transform", "translate(140,120)")
+
+document.getElementsByClassName("datamap")[0].appendChild(use);
+
+            d3.selectAll('#mainSVG').append("rect")
+.attr("width", 1000)
+.attr("height", 450);
+    var year=1971;        
+   
+   //Others   
+    displayOthers(year,country);   
+   
+   <!-- Wordcloud-->
+    wordCloud(year,country)    
+    
+   <!--Life expectancy-->
+   var LEmale = getValueLEMale(year,country);
+   var LEfemale = getValueLEFemale(year,country);
+        
+   <!--Alcohol consumption-->
+   var alcohol = getValue(year,country);
+   <!--Body Mass Index-->
+   var BMImale = getValueMale(year,country);
+   var BMIfemale = getValueFemale(year,country);
+
+});
+
+</script>
+
+
+</body>
+</html>

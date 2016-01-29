@@ -34,9 +34,9 @@ function loadLiquidFillGaugeFe(elementId, value, config) {
     if(config == null) config = liquidFillGaugeDefaultSettings();
 
     var gauge = d3.select("#" + elementId);
-    var radius = Math.min(parseInt(gauge.style("width")), parseInt(gauge.style("height")))/2;
-    var locationX = parseInt(gauge.style("width"))/2 - radius;
-    var locationY = parseInt(gauge.style("height"))/2 - radius;
+    var radius = Math.min(parseInt(200), parseInt(200))/2;
+    var locationX = parseInt(200)/2 - radius;
+    var locationY = parseInt(200)/2 - radius;
     var fillPercent = Math.max(config.minValue, Math.min(config.maxValue, value))/config.maxValue;
 
     var waveHeightScale;
@@ -127,9 +127,9 @@ function loadLiquidFillGaugeFe(elementId, value, config) {
         .text(textRounder(textStartValue) + percentText)
         .attr("class", "liquidFillGaugeText")
         .attr("text-anchor", "middle")
-        .attr("font-size", textPixels + "px")
+        .attr("font-size", 30 + "px")
         .style("fill", config.textColor)
-        .attr('transform','translate('+radius+','+textRiseScaleY(config.textVertPosition)+')');
+        .attr('transform','translate('+45+','+180+')');
         
 
     // The clipping wave area.
@@ -162,14 +162,14 @@ function loadLiquidFillGaugeFe(elementId, value, config) {
 	gauge.append("svg:line")
     .attr("x1", 0)
     .attr("x2", 200)
-    .attr("y1", 150)
-    .attr("y2", 150)
+    .attr("y1", 0)
+    .attr("y2", 0)
     .style("stroke", "rgb(6,120,155)")
 
 	 gauge.append("svg:text")
  	 .attr('class','label')
     .attr("x", 200)
-	 .attr("y", 200)
+	 .attr("y", 50)
     .attr("text-anchor", "end")
     .attr("font-size", "12")
     .attr("font-weight", "bold")
@@ -179,14 +179,14 @@ function loadLiquidFillGaugeFe(elementId, value, config) {
 	gauge.append("svg:line")
     .attr("x1", 0)
     .attr("x2", 200)
-    .attr("y1", 230)
-    .attr("y2", 230)
+    .attr("y1", 80)
+    .attr("y2", 80)
     .style("stroke", "rgb(6,120,155)")   
     
     gauge.append("svg:text")
  	 .attr('class','label')
     .attr("x", 200)
-	 .attr("y", 243)
+	 .attr("y", 93)
     .attr("text-anchor", "end")
     .attr("font-size", "12")
     .attr("font-weight", "bold")
@@ -196,14 +196,14 @@ function loadLiquidFillGaugeFe(elementId, value, config) {
     gauge.append("svg:line")
     .attr("x1", 0)
     .attr("x2", 200)
-    .attr("y1", 250)
-    .attr("y2", 250)
+    .attr("y1", 100)
+    .attr("y2", 100)
     .style("stroke", "rgb(6,120,155)")
     
     gauge.append("svg:text")
  	 .attr('class','label')
     .attr("x", 200)
-	 .attr("y", 268)
+	 .attr("y", 118)
     .attr("text-anchor", "end")
     .attr("font-size", "12")
     .attr("font-weight", "bold")
@@ -213,14 +213,14 @@ function loadLiquidFillGaugeFe(elementId, value, config) {
 	gauge.append("svg:line")
     .attr("x1", 0)
     .attr("x2", 200)
-    .attr("y1", 276)
-    .attr("y2", 276)
+    .attr("y1", 126)
+    .attr("y2", 126)
     .style("stroke", "rgb(6,120,155)")
     
 	gauge.append("svg:text")
  	 .attr('class','label')
     .attr("x", 200)
-	 .attr("y", 320)
+	 .attr("y", 170)
     .attr("text-anchor", "end")
     .attr("font-size", "12")
     .attr("font-weight", "bold")
@@ -230,9 +230,9 @@ function loadLiquidFillGaugeFe(elementId, value, config) {
 	gauge.append("svg:line")
     .attr("x1", 0)
     .attr("x2", 200)
-    .attr("y1", 350)
-    .attr("y2", 350)
-    .style("stroke", "rgb(6,120,155)")
+    .attr("y1", 200)
+    .attr("y2", 200)
+    .style("stroke", "rgb(6,120,155)");
     
        
 
@@ -241,17 +241,36 @@ function loadLiquidFillGaugeFe(elementId, value, config) {
         .text(textRounder(textStartValue) + percentText)
         .attr("class", "liquidFillGaugeText")
         .attr("text-anchor", "middle")
-        .attr("font-size", textPixels + "px")
+        .attr("font-size", 30 + "px")
         .style("fill", config.waveTextColor)
-        .attr('transform','translate('+radius+','+textRiseScaleY(config.textVertPosition)+')')
+        .attr('transform','translate('+45+','+180+')')
+        ;
+        
+         // Text where the wave does overlap.
+    var text3 = gaugeGroup.append("text")
+        .text("BMI")
+        .attr("class", "liquidFillGaugeText")
+        .attr("text-anchor", "middle")
+        .attr("font-size", 15 + "px")
+        .style("fill", config.waveTextColor)
+        .attr('transform','translate('+45+','+150+')')
         ;
 
+	var noData="No data";
     // Make the value count up.
     if (value==0) {
-	     var textTween = function(){
+    	var textNodata = gaugeGroup.append("text")
+        .text("No data")
+        .attr("class", "liquidFillGaugeText")
+        .attr("text-anchor", "middle")
+        .attr("font-size", 12 + "px")
+        .style("fill", config.waveTextColor)
+        .attr('transform','translate('+45+','+195+')')
+        ;
+	     /*var textTween = function(){
             var i = d3.interpolate(this.textContent, "No Data");
-            return function(t) { this.textContent = "No Data" + percentText; }
-        };
+            return function(t) { this.textContent = "No data" + percentText; }
+        };*/
         text1.transition()
             .duration(config.waveRiseTime)
             .tween("text", textTween);
