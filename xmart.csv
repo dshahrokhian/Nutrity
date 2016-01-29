@@ -227,9 +227,9 @@ Honduras, Male, 18+  years,25.5 [23.9-27.1],25.5,25.2 [23.7-26.7],25.2
 Hungary, Both sexes, 18+  years,26.3 [25.1-27.4],26.3,26.2 [25.2-27.3],26.2
 Hungary, Female, 18+  years,25.2 [23.2-27.2],25.2,25.2 [23.6-26.9],25.2
 Hungary, Male, 18+  years,27.5 [26.3-28.9],27.5,27.3 [26.2-28.4],27.3
-Iceland, Both sexes, 18+  years,25.9 [24.7-27.1],25.9,25.9 [24.8-26.9],25.9
-Iceland, Female, 18+  years,25.1 [23.2-27],25.1,25.1 [23.5-26.8],25.1
-Iceland, Male, 18+  years,26.7 [25.2-28.4],26.7,26.6 [25.3-27.9],26.6
+Greenland, Both sexes, 18+  years,25.9 [24.7-27.1],25.9,25.9 [24.8-26.9],25.9
+Greenland, Female, 18+  years,25.1 [23.2-27],25.1,25.1 [23.5-26.8],25.1
+Greenland, Male, 18+  years,26.7 [25.2-28.4],26.7,26.6 [25.3-27.9],26.6
 India, Both sexes, 18+  years,21.9 [21.5-22.4],21.9,21.6 [21.3-21.9],21.6
 India, Female, 18+  years,22.1 [21.4-22.8],22.1,21.7 [21.3-22.1],21.7
 India, Male, 18+  years,21.8 [21.1-22.4],21.8,21.5 [21.1-21.9],21.5
@@ -422,9 +422,9 @@ Republic of Moldova, Male, 18+  years,26.3 [25.5-27.2],26.3,26 [25.2-26.9],26
 Romania, Both sexes, 18+  years,25.3 [24.2-26.5],25.3,25.2 [24.3-26.1],25.2
 Romania, Female, 18+  years,24.9 [23.2-26.6],24.9,24.9 [23.5-26.3],24.9
 Romania, Male, 18+  years,25.7 [24.3-27.1],25.7,25.4 [24.3-26.5],25.4
-Russian Federation, Both sexes, 18+  years,26.5 [25.8-27.1],26.5,26.2 [25.8-26.7],26.2
-Russian Federation, Female, 18+  years,26.8 [25.9-27.8],26.8,26.7 [26.1-27.3],26.7
-Russian Federation, Male, 18+  years,26.1 [25.2-27.1],26.1,25.7 [25.1-26.3],25.7
+Russia, Both sexes, 18+  years,26.5 [25.8-27.1],26.5,26.2 [25.8-26.7],26.2
+Russia, Female, 18+  years,26.8 [25.9-27.8],26.8,26.7 [26.1-27.3],26.7
+Russia, Male, 18+  years,26.1 [25.2-27.1],26.1,25.7 [25.1-26.3],25.7
 Rwanda, Both sexes, 18+  years,22 [21.5-22.5],22,21.7 [21.3-22.1],21.7
 Rwanda, Female, 18+  years,22.7 [21.9-23.4],22.7,22.3 [21.7-22.9],22.3
 Rwanda, Male, 18+  years,21.3 [20.6-22],21.3,21.1 [20.5-21.6],21.1
@@ -452,9 +452,9 @@ Saudi Arabia, Male, 18+  years,28.3 [27.3-29.3],28.3,27.8 [27.1-28.6],27.8
 Senegal, Both sexes, 18+  years,23 [22.3-23.6],23,22.7 [22.2-23.2],22.7
 Senegal, Female, 18+  years,24.1 [23.1-25],24.1,23.8 [23.1-24.5],23.8
 Senegal, Male, 18+  years,21.8 [21-22.7],21.8,21.6 [20.9-22.4],21.6
-Serbia, Both sexes, 18+  years,25.8 [25.1-26.5],25.8,25.7 [25.2-26.2],25.7
-Serbia, Female, 18+  years,25.2 [24-26.5],25.2,25.2 [24.3-26.1],25.2
-Serbia, Male, 18+  years,26.4 [25.7-27.1],26.4,26.2 [25.7-26.8],26.2
+Republic of Serbia, Both sexes, 18+  years,25.8 [25.1-26.5],25.8,25.7 [25.2-26.2],25.7
+Republic of Serbia, Female, 18+  years,25.2 [24-26.5],25.2,25.2 [24.3-26.1],25.2
+Republic of Serbia, Male, 18+  years,26.4 [25.7-27.1],26.4,26.2 [25.7-26.8],26.2
 Seychelles, Both sexes, 18+  years,26.8 [26.2-27.4],26.8,26.4 [26-26.9],26.4
 Seychelles, Female, 18+  years,28 [27.2-28.8],28,27.7 [27-28.4],27.7
 Seychelles, Male, 18+  years,25.6 [24.9-26.4],25.6,25.2 [24.6-25.8],25.2
@@ -548,9 +548,9 @@ Ukraine, Male, 18+  years,26.4 [23.9-28.9],26.4,26.1 [23.7-28.5],26.1
 United Arab Emirates, Both sexes, 18+  years,29 [27.9-30],29,28.6 [27.8-29.4],28.6
 United Arab Emirates, Female, 18+  years,29.7 [28.3-31.3],29.7,29.5 [28.3-30.7],29.5
 United Arab Emirates, Male, 18+  years,28.6 [27.3-30],28.6,28.2 [27.1-29.3],28.2
-United Kingdom of Great Britain and Northern Ireland, Both sexes, 18+  years,27.3 [27-27.6],27.3,27 [26.9-27.2],27
-United Kingdom of Great Britain and Northern Ireland, Female, 18+  years,27.1 [26.7-27.6],27.1,26.9 [26.6-27.1],26.9
-United Kingdom of Great Britain and Northern Ireland, Male, 18+  years,27.5 [27-27.9],27.5,27.2 [27-27.5],27.2
+United Kingdom, Both sexes, 18+  years,27.3 [27-27.6],27.3,27 [26.9-27.2],27
+United Kingdom, Female, 18+  years,27.1 [26.7-27.6],27.1,26.9 [26.6-27.1],26.9
+United Kingdom, Male, 18+  years,27.5 [27-27.9],27.5,27.2 [27-27.5],27.2
 United Republic of Tanzania, Both sexes, 18+  years,23.1 [22.6-23.5],23.1,22.8 [22.4-23.1],22.8
 United Republic of Tanzania, Female, 18+  years,24 [23.3-24.6],24,23.5 [23-24],23.5
 United Republic of Tanzania, Male, 18+  years,22.2 [21.5-22.9],22.2,22 [21.4-22.6],22

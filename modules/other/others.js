@@ -7,7 +7,8 @@ function displayOthers(year,country){
         .text(country + ", year "+year)
         .style("font-weight", "bold")
         .attr("font-size", 35 + "px")
-        .style("fill", "blue")
+        .style("fill", "#1C2F54")
+        .style("font-family", "Avant Garde")
         .attr("x","50");
         
   var wordcloudDesc = d3.select("#mainSVG").append("g").attr("transform", "translate(30,390)");	
