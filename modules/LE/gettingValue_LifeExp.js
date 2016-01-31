@@ -1,6 +1,5 @@
 function getValueLEFemale(year,country){
 
-
 var BMIfemale;
 
 //Loading data
@@ -41,9 +40,8 @@ var filteredAvg;
   
 }
 
-
-
 function getValueLEMale(year,country){
+  
 var BMImale;
 
 //Loading data

@@ -1,3 +1,9 @@
+var config6 = liquidFillGaugeDefaultSettingsAlc();
+config6.waveTextColor = "blue";
+config6.textVertPosition = -0.3 ;
+config6.waveAnimateTime = 1000;
+
+
 function getValue(year,country){
 
 

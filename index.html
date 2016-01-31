@@ -2,12 +2,12 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+  <script src="libraries/d3.v3.min.js" language="JavaScript"></script>
   <script type="text/javascript" src="modules/LE/gettingValue_LifeExp.js"></script>
   <script type="text/javascript" src="bower_components/d3/d3.js"></script>
   <script type="text/javascript" src="bower_components/d3-cloud/d3.layout.cloud.js"></script>
-  <script type="text/javascript" src="modules/ALC/gettingValue_Alcohol.js"></script>
   <script src="modules/ALC/liquidFillGaugeAlc.js" language="JavaScript"></script>
+  <script type="text/javascript" src="modules/ALC/gettingValue_Alcohol.js"></script>
   <script src="modules/BMI/liquidFillGaugeMale.js" language="JavaScript"></script>
   <script src="modules/BMI/liquidFillGaugeFemale.js" language="JavaScript"></script>
   <script type="text/javascript" src="modules/BMI/gettingValue.js"></script>
@@ -17,620 +17,166 @@
 
   <style>
   .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+  #filter {
+    position: absolute;
+    top: 1px;
+    left: 25px;
+    padding: 20px;
+  }
+  #year {
+    position: absolute;
+    top: 30px;
+    left: 25px;
+    padding: 20px;
+  }
   </style>
-  <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script> -->
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+  <script src="libraries/jquery-2.2.0.min.js"></script>
+  <script src="libraries/topojson.min.js"></script>
   <script src="modules/map/dist/datamaps.world.min.js"></script>
 </head>
 <body onload="init()">
   <div id="container" class="container" style="position: relative; width: 1280px; height: 720px; margin:0 auto; background-color: #D8D8D7">
   </div>
+  <div id="year" style="display: inline-block;">
+    <span>Year: </span>
+    <select id = "years">
+      <option value="1961">1961</option>
+      <option value="1962">1962</option> 
+      <option value="1963">1963</option>
+      <option value="1964">1964</option>
+      <option value="1965">1965</option>
+      <option value="1966">1966</option>
+      <option value="1967">1967</option>
+      <option value="1968">1968</option>
+      <option value="1969">1969</option>
+      <option value="1970">1970</option>
+      <option value="1971">1971</option>
+      <option value="1972">1972</option> 
+      <option value="1973">1973</option>
+      <option value="1974">1974</option>
+      <option value="1975">1975</option>
+      <option value="1976">1976</option>
+      <option value="1977">1977</option>
+      <option value="1978">1978</option>
+      <option value="1979">1979</option>
+      <option value="1980">1980</option>
+      <option value="1981">1981</option>
+      <option value="1982">1982</option> 
+      <option value="1983">1983</option>
+      <option value="1984">1984</option>
+      <option value="1985">1985</option>
+      <option value="1986">1986</option>
+      <option value="1987">1987</option>
+      <option value="1988">1988</option>
+      <option value="1989">1989</option>
+      <option value="1990">1990</option>
+      <option value="1991">1991</option>
+      <option value="1992">1992</option> 
+      <option value="1993">1993</option>
+      <option value="1994">1994</option>
+      <option value="1995">1995</option>
+      <option value="1996">1996</option>
+      <option value="1997">1997</option>
+      <option value="1998">1998</option>
+      <option value="1999">1999</option>
+      <option value="2000">2000</option>
+      <option value="2001">2001</option>
+      <option value="2002">2002</option> 
+      <option value="2003">2003</option>
+      <option value="2004" selected="selected">2004</option>
+      <option value="2005">2005</option>
+      <option value="2006">2006</option>
+      <option value="2007">2007</option>
+      <option value="2008">2008</option>
+      <option value="2009">2009</option>
+      <option value="2010">2010</option>
+      <option value="2011">2011</option>
+      <option value="2012">2012</option>
+      <option value="2013">2013</option>
+    </select> 
+  </div>
+  <div id="filter" style="display: inline-block;">
+    <span>Color palette: </span>
+    <select id="gradient">
+      <option value="'alcohol'" selected="selected">Alcohol consumption</option> 
+      <option value="'bmiMale'">Body Mass Index (Male)</option>
+      <option value="'bmiFemale'">Body Mass Index (Female)</option>
+      <option value="'leMale'">Life Expectancy (Male)</option>
+      <option value="'leFemale'">Life Expectancy (Female)</option>
+    </select> 
+  </div>
   <script>
+
+  var dataFilter
+  var dataYear
+  var map; 
 
   function init() {
 
-    var year = 1971;        
-    var SVGwidth = 1020;
-    var SVGheight = 450;
+    dataFilter = "alcohol"
+    dataYear = 2004
 
-    var yearlyData = getValueYearlyAlc(year)
-    console.log(yearlyData)
-    var max = d3.max(yearlyData, function(d) { return +d[year];} );
-    console.log("max: " + max)
-    var gradientColors = d3.scale.linear().domain([0,max]).range(["#EFEFFF","#02386F"]);
-console.log("asd: " + gradientColors)
+      // handle on click event for year drop-down
+      d3.select('#years')
+      .on('change', function() {
 
-    var map = new Datamap({
-      element: document.getElementById("container"),
-      projection: 'mercator',
-      fills: {
-        defaultFill: "#183B73",
-        authorHasTraveledTo: "#fa0fa0",
-        ARB :gradientColors("Arab World"),
-        CSS :gradientColors("Caribbean small states"),
-        CEB :gradientColors("Central Europe and the Baltics"),
-        EAS :gradientColors("East Asia & Pacific (all income levels)"),
-        EAP :gradientColors("East Asia & Pacific (developing only)"),
-        EMU :gradientColors("Euro area"),
-        ECS :gradientColors("Europe & Central Asia (all income levels)"),
-        ECA :gradientColors("Europe & Central Asia (developing only)"),
-        EUU :gradientColors("European Union"),
-        FCS :gradientColors("Fragile and conflict affected situations"),
-        HPC :gradientColors("Heavily indebted poor countries (HIPC)"),
-        HIC :gradientColors("High income"),
-        NOC :gradientColors("High income: nonOECD"),
-        OEC :gradientColors("High income: OECD"),
-        LCN :gradientColors("Latin America & Caribbean (all income levels)"),
-        LAC :gradientColors("Latin America & Caribbean (developing only)"),
-        LDC :gradientColors("Least developed countries: UN classification"),
-        LMY :gradientColors("Low & middle income"),
-        LIC :gradientColors("Low income"),
-        LMC :gradientColors("Lower middle income"),
-        MEA :gradientColors("Middle East & North Africa (all income levels)"),
-        MNA :gradientColors("Middle East & North Africa (developing only)"),
-        MIC :gradientColors("Middle income"),
-        NAC :gradientColors("North America"),
-        OED :gradientColors("OECD members"),
-        OSS :gradientColors("Other small states"),
-        PSS :gradientColors("Pacific island small states"),
-        SST :gradientColors("Small states"),
-        SAS :gradientColors("South Asia"),
-        SSF :gradientColors("Sub-Saharan Africa (all income levels)"),
-        SSA :gradientColors("Sub-Saharan Africa (developing only)"),
-        UMC :gradientColors("Upper middle income"),
-        WLD :gradientColors("World"),
-        AFG :gradientColors("Afghanistan"),
-        ALB :gradientColors("Albania"),
-        DZA :gradientColors("Algeria"),
-        ASM :gradientColors("American Samoa"),
-        ADO :gradientColors("Andorra"),
-        AGO :gradientColors("Angola"),
-        ATG :gradientColors("Antigua and Barbuda"),
-        ARG :gradientColors("Argentina"),
-        ARM :gradientColors("Armenia"),
-        ABW :gradientColors("Aruba"),
-        AUS :gradientColors("Australia"),
-        AUT :gradientColors("Austria"),
-        AZE :gradientColors("Azerbaijan"),
-        BHS :gradientColors("Bahamas, The"),
-        BHR :gradientColors("Bahrain"),
-        BGD :gradientColors("Bangladesh"),
-        BRB :gradientColors("Barbados"),
-        BLR :gradientColors("Belarus"),
-        BEL :gradientColors("Belgium"),
-        BLZ :gradientColors("Belize"),
-        BEN :gradientColors("Benin"),
-        BMU :gradientColors("Bermuda"),
-        BTN :gradientColors("Bhutan"),
-        BOL :gradientColors("Bolivia"),
-        BIH :gradientColors("Bosnia and Herzegovina"),
-        BWA :gradientColors("Botswana"),
-        BRA :gradientColors("Brazil"),
-        BRN :gradientColors("Brunei Darussalam"),
-        BGR :gradientColors("Bulgaria"),
-        BFA :gradientColors("Burkina Faso"),
-        BDI :gradientColors("Burundi"),
-        CPV :gradientColors("Cabo Verde"),
-        KHM :gradientColors("Cambodia"),
-        CMR :gradientColors("Cameroon"),
-        CAN :gradientColors("Canada"),
-        CYM :gradientColors("Cayman Islands"),
-        CAF :gradientColors("Central African Republic"),
-        TCD :gradientColors("Chad"),
-        CHI :gradientColors("Channel Islands"),
-        CHL :gradientColors("Chile"),
-        CHN :gradientColors("China"),
-        COL :gradientColors("Colombia"),
-        COM :gradientColors("Comoros"),
-        ZAR :gradientColors("Congo, Dem. Rep."),
-        COG :gradientColors("Congo, Rep."),
-        CRI :gradientColors("Costa Rica"),
-        CIV :gradientColors("Cote d'Ivoire"),
-        HRV :gradientColors("Croatia"),
-        CUB :gradientColors("Cuba"),
-        CUW :gradientColors("Curacao"),
-        CYP :gradientColors("Cyprus"),
-        CZE :gradientColors("Czech Republic"),
-        DNK :gradientColors("Denmark"),
-        DJI :gradientColors("Djibouti"),
-        DMA :gradientColors("Dominica"),
-        DOM :gradientColors("Dominican Republic"),
-        ECU :gradientColors("Ecuador"),
-        EGY :gradientColors("Egypt, Arab Rep."),
-        SLV :gradientColors("El Salvador"),
-        GNQ :gradientColors("Equatorial Guinea"),
-        ERI :gradientColors("Eritrea"),
-        EST :gradientColors("Estonia"),
-        ETH :gradientColors("Ethiopia"),
-        FRO :gradientColors("Faeroe Islands"),
-        FJI :gradientColors("Fiji"),
-        FIN :gradientColors("Finland"),
-        FRA :gradientColors("France"),
-        PYF :gradientColors("French Polynesia"),
-        GAB :gradientColors("Gabon"),
-        GMB :gradientColors("Gambia, The"),
-        GEO :gradientColors("Georgia"),
-        DEU :gradientColors("Germany"),
-        GHA :gradientColors("Ghana"),
-        GRC :gradientColors("Greece"),
-        GRL :gradientColors("Greenland"),
-        GRD :gradientColors("Grenada"),
-        GUM :gradientColors("Guam"),
-        GTM :gradientColors("Guatemala"),
-        GIN :gradientColors("Guinea"),
-        GNB :gradientColors("Guinea-Bissau"),
-        GUY :gradientColors("Guyana"),
-        HTI :gradientColors("Haiti"),
-        HND :gradientColors("Honduras"),
-        HKG :gradientColors("Hong Kong SAR, China"),
-        HUN :gradientColors("Hungary"),
-        ISL :gradientColors("Greenland"),
-        IND :gradientColors("India"),
-        IDN :gradientColors("Indonesia"),
-        IRN :gradientColors("Iran, Islamic Rep."),
-        IRQ :gradientColors("Iraq"),
-        IRL :gradientColors("Ireland"),
-        IMY :gradientColors("Isle of Man"),
-        ISR :gradientColors("Israel"),
-        ITA :gradientColors("Italy"),
-        JAM :gradientColors("Jamaica"),
-        JPN :gradientColors("Japan"),
-        JOR :gradientColors("Jordan"),
-        KAZ :gradientColors("Kazakhstan"),
-        KEN :gradientColors("Kenya"),
-        KIR :gradientColors("Kiribati"),
-        PRK :gradientColors("Korea, Dem. Rep."),
-        KOR :gradientColors("Korea, Rep."),
-        KSV :gradientColors("Kosovo"),
-        KWT :gradientColors("Kuwait"),
-        KGZ :gradientColors("Kyrgyz Republic"),
-        LAO :gradientColors("Lao PDR"),
-        LVA :gradientColors("Latvia"),
-        LBN :gradientColors("Lebanon"),
-        LSO :gradientColors("Lesotho"),
-        LBR :gradientColors("Liberia"),
-        LBY :gradientColors("Libya"),
-        LIE :gradientColors("Liechtenstein"),
-        LTU :gradientColors("Lithuania"),
-        LUX :gradientColors("Luxembourg"),
-        MAC :gradientColors("Macao SAR, China"),
-        MKD :gradientColors("Macedonia, FYR"),
-        MDG :gradientColors("Madagascar"),
-        MWI :gradientColors("Malawi"),
-        MYS :gradientColors("Malaysia"),
-        MDV :gradientColors("Maldives"),
-        MLI :gradientColors("Mali"),
-        MLT :gradientColors("Malta"),
-        MHL :gradientColors("Marshall Islands"),
-        MRT :gradientColors("Mauritania"),
-        MUS :gradientColors("Mauritius"),
-        MEX :gradientColors("Mexico"),
-        FSM :gradientColors("Micronesia, Fed. Sts."),
-        MDA :gradientColors("Moldova"),
-        MCO :gradientColors("Monaco"),
-        MNG :gradientColors("Mongolia"),
-        MNE :gradientColors("Montenegro"),
-        MAR :gradientColors("Morocco"),
-        MOZ :gradientColors("Mozambique"),
-        MMR :gradientColors("Myanmar"),
-        NAM :gradientColors("Namibia"),
-        NPL :gradientColors("Nepal"),
-        NLD :gradientColors("Netherlands"),
-        NCL :gradientColors("New Caledonia"),
-        NZL :gradientColors("New Zealand"),
-        NIC :gradientColors("Nicaragua"),
-        NER :gradientColors("Niger"),
-        NGA :gradientColors("Nigeria"),
-        MNP :gradientColors("Northern Mariana Islands"),
-        NOR :gradientColors("Norway"),
-        OMN :gradientColors("Oman"),
-        PAK :gradientColors("Pakistan"),
-        PLW :gradientColors("Palau"),
-        PAN :gradientColors("Panama"),
-        PNG :gradientColors("Papua New Guinea"),
-        PRY :gradientColors("Paraguay"),
-        PER :gradientColors("Peru"),
-        PHL :gradientColors("Philippines"),
-        POL :gradientColors("Poland"),
-        PRT :gradientColors("Portugal"),
-        PRI :gradientColors("Puerto Rico"),
-        QAT :gradientColors("Qatar"),
-        ROM :gradientColors("Romania"),
-        RUS :gradientColors("Russia"),
-        RWA :gradientColors("Rwanda"),
-        WSM :gradientColors("Samoa"),
-        SMR :gradientColors("San Marino"),
-        STP :gradientColors("Sao Tome and Principe"),
-        SAU :gradientColors("Saudi Arabia"),
-        SEN :gradientColors("Senegal"),
-        SRB :gradientColors("Republic of Serbia"),
-        SYC :gradientColors("Seychelles"),
-        SLE :gradientColors("Sierra Leone"),
-        SGP :gradientColors("Singapore"),
-        SXM :gradientColors("Sint Maarten (Dutch part)"),
-        SVK :gradientColors("Slovak Republic"),
-        SVN :gradientColors("Slovenia"),
-        SLB :gradientColors("Solomon Islands"),
-        SOM :gradientColors("Somalia"),
-        ZAF :gradientColors("South Africa"),
-        SSD :gradientColors("South Sudan"),
-        ESP :gradientColors("Spain"),
-        LKA :gradientColors("Sri Lanka"),
-        KNA :gradientColors("St. Kitts and Nevis"),
-        LCA :gradientColors("St. Lucia"),
-        MAF :gradientColors("St. Martin (French part)"),
-        VCT :gradientColors("St. Vincent and the Grenadines"),
-        SDN :gradientColors("Sudan"),
-        SUR :gradientColors("Suriname"),
-        SWZ :gradientColors("Swaziland"),
-        SWE :gradientColors("Sweden"),
-        CHE :gradientColors("Switzerland"),
-        SYR :gradientColors("Syrian Arab Republic"),
-        TJK :gradientColors("Tajikistan"),
-        TZA :gradientColors("Tanzania"),
-        THA :gradientColors("Thailand"),
-        TMP :gradientColors("Timor-Leste"),
-        TGO :gradientColors("Togo"),
-        TON :gradientColors("Tonga"),
-        TTO :gradientColors("Trinidad and Tobago"),
-        TUN :gradientColors("Tunisia"),
-        TUR :gradientColors("Turkey"),
-        TKM :gradientColors("Turkmenistan"),
-        TCA :gradientColors("Turks and Caicos Islands"),
-        TUV :gradientColors("Tuvalu"),
-        UGA :gradientColors("Uganda"),
-        UKR :gradientColors("Ukraine"),
-        ARE :gradientColors("United Arab Emirates"),
-        GBR :gradientColors("United Kingdom"),
-        USA :gradientColors("United States of America"),
-        URY :gradientColors("Uruguay"),
-        UZB :gradientColors("Uzbekistan"),
-        VUT :gradientColors("Vanuatu"),
-        VEN :gradientColors("Venezuela, RB"),
-        VNM :gradientColors("Vietnam"),
-        VIR :gradientColors("Virgin Islands (U.S.)"),
-        WBG :gradientColors("West Bank and Gaza"),
-        YEM :gradientColors("Yemen, Rep."),
-        ZMB :gradientColors("Zambia"),
-        ZWE :gradientColors("Zimbabwe")
-      },
-      data: {
-        ARB : { fillKey: "ARB" },
-        CSS : { fillKey: "CSS" },
-        CEB : { fillKey: "CEB" },
-        EAS : { fillKey: "EAS" },
-        EAP : { fillKey: "EAP" },
-        EMU : { fillKey: "EMU" },
-        ECS : { fillKey: "ECS" },
-        ECA : { fillKey: "ECA" },
-        EUU : { fillKey: "EUU" },
-        FCS : { fillKey: "FCS" },
-        HPC : { fillKey: "HPC" },
-        HIC : { fillKey: "HIC" },
-        NOC : { fillKey: "NOC" },
-        OEC : { fillKey: "OEC" },
-        LCN : { fillKey: "LCN" },
-        LAC : { fillKey: "LAC" },
-        LDC : { fillKey: "LDC" },
-        LMY : { fillKey: "LMY" },
-        LIC : { fillKey: "LIC" },
-        LMC : { fillKey: "LMC" },
-        MEA : { fillKey: "MEA" },
-        MNA : { fillKey: "MNA" },
-        MIC : { fillKey: "MIC" },
-        NAC : { fillKey: "NAC" },
-        OED : { fillKey: "OED" },
-        OSS : { fillKey: "OSS" },
-        PSS : { fillKey: "PSS" },
-        SST : { fillKey: "SST" },
-        SAS : { fillKey: "SAS" },
-        SSF : { fillKey: "SSF" },
-        SSA : { fillKey: "SSA" },
-        UMC : { fillKey: "UMC" },
-        WLD : { fillKey: "WLD" },
-        AFG : { fillKey: "AFG" },
-        ALB : { fillKey: "ALB" },
-        DZA : { fillKey: "DZA" },
-        ASM : { fillKey: "ASM" },
-        ADO : { fillKey: "ADO" },
-        AGO : { fillKey: "AGO" },
-        ATG : { fillKey: "ATG" },
-        ARG : { fillKey: "ARG" },
-        ARM : { fillKey: "ARM" },
-        ABW : { fillKey: "ABW" },
-        AUS : { fillKey: "AUS" },
-        AUT : { fillKey: "AUT" },
-        AZE : { fillKey: "AZE" },
-        BHS : { fillKey: "BHS" },
-        BHR : { fillKey: "BHR" },
-        BGD : { fillKey: "BGD" },
-        BRB : { fillKey: "BRB" },
-        BLR : { fillKey: "BLR" },
-        BEL : { fillKey: "BEL" },
-        BLZ : { fillKey: "BLZ" },
-        BEN : { fillKey: "BEN" },
-        BMU : { fillKey: "BMU" },
-        BTN : { fillKey: "BTN" },
-        BOL : { fillKey: "BOL" },
-        BIH : { fillKey: "BIH" },
-        BWA : { fillKey: "BWA" },
-        BRA : { fillKey: "BRA" },
-        BRN : { fillKey: "BRN" },
-        BGR : { fillKey: "BGR" },
-        BFA : { fillKey: "BFA" },
-        BDI : { fillKey: "BDI" },
-        CPV : { fillKey: "CPV" },
-        KHM : { fillKey: "KHM" },
-        CMR : { fillKey: "CMR" },
-        CAN : { fillKey: "CAN" },
-        CYM : { fillKey: "CYM" },
-        CAF : { fillKey: "CAF" },
-        TCD : { fillKey: "TCD" },
-        CHI : { fillKey: "CHI" },
-        CHL : { fillKey: "CHL" },
-        CHN : { fillKey: "CHN" },
-        COL : { fillKey: "COL" },
-        COM : { fillKey: "COM" },
-        ZAR : { fillKey: "ZAR" },
-        COG : { fillKey: "COG" },
-        CRI : { fillKey: "CRI" },
-        CIV : { fillKey: "CIV" },
-        HRV : { fillKey: "HRV" },
-        CUB : { fillKey: "CUB" },
-        CUW : { fillKey: "CUW" },
-        CYP : { fillKey: "CYP" },
-        CZE : { fillKey: "CZE" },
-        DNK : { fillKey: "DNK" },
-        DJI : { fillKey: "DJI" },
-        DMA : { fillKey: "DMA" },
-        DOM : { fillKey: "DOM" },
-        ECU : { fillKey: "ECU" },
-        EGY : { fillKey: "EGY" },
-        SLV : { fillKey: "SLV" },
-        GNQ : { fillKey: "GNQ" },
-        ERI : { fillKey: "ERI" },
-        EST : { fillKey: "EST" },
-        ETH : { fillKey: "ETH" },
-        FRO : { fillKey: "FRO" },
-        FJI : { fillKey: "FJI" },
-        FIN : { fillKey: "FIN" },
-        FRA : { fillKey: "FRA" },
-        PYF : { fillKey: "PYF" },
-        GAB : { fillKey: "GAB" },
-        GMB : { fillKey: "GMB" },
-        GEO : { fillKey: "GEO" },
-        DEU : { fillKey: "DEU" },
-        GHA : { fillKey: "GHA" },
-        GRC : { fillKey: "GRC" },
-        GRL : { fillKey: "GRL" },
-        GRD : { fillKey: "GRD" },
-        GUM : { fillKey: "GUM" },
-        GTM : { fillKey: "GTM" },
-        GIN : { fillKey: "GIN" },
-        GNB : { fillKey: "GNB" },
-        GUY : { fillKey: "GUY" },
-        HTI : { fillKey: "HTI" },
-        HND : { fillKey: "HND" },
-        HKG : { fillKey: "HKG" },
-        HUN : { fillKey: "HUN" },
-        ISL : { fillKey: "ISL" },
-        IND : { fillKey: "IND" },
-        IDN : { fillKey: "IDN" },
-        IRN : { fillKey: "IRN" },
-        IRQ : { fillKey: "IRQ" },
-        IRL : { fillKey: "IRL" },
-        IMY : { fillKey: "IMY" },
-        ISR : { fillKey: "ISR" },
-        ITA : { fillKey: "ITA" },
-        JAM : { fillKey: "JAM" },
-        JPN : { fillKey: "JPN" },
-        JOR : { fillKey: "JOR" },
-        KAZ : { fillKey: "KAZ" },
-        KEN : { fillKey: "KEN" },
-        KIR : { fillKey: "KIR" },
-        PRK : { fillKey: "PRK" },
-        KOR : { fillKey: "KOR" },
-        KSV : { fillKey: "KSV" },
-        KWT : { fillKey: "KWT" },
-        KGZ : { fillKey: "KGZ" },
-        LAO : { fillKey: "LAO" },
-        LVA : { fillKey: "LVA" },
-        LBN : { fillKey: "LBN" },
-        LSO : { fillKey: "LSO" },
-        LBR : { fillKey: "LBR" },
-        LBY : { fillKey: "LBY" },
-        LIE : { fillKey: "LIE" },
-        LTU : { fillKey: "LTU" },
-        LUX : { fillKey: "LUX" },
-        MAC : { fillKey: "MAC" },
-        MKD : { fillKey: "MKD" },
-        MDG : { fillKey: "MDG" },
-        MWI : { fillKey: "MWI" },
-        MYS : { fillKey: "MYS" },
-        MDV : { fillKey: "MDV" },
-        MLI : { fillKey: "MLI" },
-        MLT : { fillKey: "MLT" },
-        MHL : { fillKey: "MHL" },
-        MRT : { fillKey: "MRT" },
-        MUS : { fillKey: "MUS" },
-        MEX : { fillKey: "MEX" },
-        FSM : { fillKey: "FSM" },
-        MDA : { fillKey: "MDA" },
-        MCO : { fillKey: "MCO" },
-        MNG : { fillKey: "MNG" },
-        MNE : { fillKey: "MNE" },
-        MAR : { fillKey: "MAR" },
-        MOZ : { fillKey: "MOZ" },
-        MMR : { fillKey: "MMR" },
-        NAM : { fillKey: "NAM" },
-        NPL : { fillKey: "NPL" },
-        NLD : { fillKey: "NLD" },
-        NCL : { fillKey: "NCL" },
-        NZL : { fillKey: "NZL" },
-        NIC : { fillKey: "NIC" },
-        NER : { fillKey: "NER" },
-        NGA : { fillKey: "NGA" },
-        MNP : { fillKey: "MNP" },
-        NOR : { fillKey: "NOR" },
-        OMN : { fillKey: "OMN" },
-        PAK : { fillKey: "PAK" },
-        PLW : { fillKey: "PLW" },
-        PAN : { fillKey: "PAN" },
-        PNG : { fillKey: "PNG" },
-        PRY : { fillKey: "PRY" },
-        PER : { fillKey: "PER" },
-        PHL : { fillKey: "PHL" },
-        POL : { fillKey: "POL" },
-        PRT : { fillKey: "PRT" },
-        PRI : { fillKey: "PRI" },
-        QAT : { fillKey: "QAT" },
-        ROM : { fillKey: "ROM" },
-        RUS : { fillKey: "RUS" },
-        RWA : { fillKey: "RWA" },
-        WSM : { fillKey: "WSM" },
-        SMR : { fillKey: "SMR" },
-        STP : { fillKey: "STP" },
-        SAU : { fillKey: "SAU" },
-        SEN : { fillKey: "SEN" },
-        SRB : { fillKey: "SRB" },
-        SYC : { fillKey: "SYC" },
-        SLE : { fillKey: "SLE" },
-        SGP : { fillKey: "SGP" },
-        SXM : { fillKey: "SXM" },
-        SVK : { fillKey: "SVK" },
-        SVN : { fillKey: "SVN" },
-        SLB : { fillKey: "SLB" },
-        SOM : { fillKey: "SOM" },
-        ZAF : { fillKey: "ZAF" },
-        SSD : { fillKey: "SSD" },
-        ESP : { fillKey: "ESP" },
-        LKA : { fillKey: "LKA" },
-        KNA : { fillKey: "KNA" },
-        LCA : { fillKey: "LCA" },
-        MAF : { fillKey: "MAF" },
-        VCT : { fillKey: "VCT" },
-        SDN : { fillKey: "SDN" },
-        SUR : { fillKey: "SUR" },
-        SWZ : { fillKey: "SWZ" },
-        SWE : { fillKey: "SWE" },
-        CHE : { fillKey: "CHE" },
-        SYR : { fillKey: "SYR" },
-        TJK : { fillKey: "TJK" },
-        TZA : { fillKey: "TZA" },
-        THA : { fillKey: "THA" },
-        TMP : { fillKey: "TMP" },
-        TGO : { fillKey: "TGO" },
-        TON : { fillKey: "TON" },
-        TTO : { fillKey: "TTO" },
-        TUN : { fillKey: "TUN" },
-        TUR : { fillKey: "TUR" },
-        TKM : { fillKey: "TKM" },
-        TCA : { fillKey: "TCA" },
-        TUV : { fillKey: "TUV" },
-        UGA : { fillKey: "UGA" },
-        UKR : { fillKey: "UKR" },
-        ARE : { fillKey: "ARE" },
-        GBR : { fillKey: "GBR" },
-        USA : { fillKey: "USA" },
-        URY : { fillKey: "URY" },
-        UZB : { fillKey: "UZB" },
-        VUT : { fillKey: "VUT" },
-        VEN : { fillKey: "VEN" },
-        VNM : { fillKey: "VNM" },
-        VIR : { fillKey: "VIR" },
-        WBG : { fillKey: "WBG" },
-        YEM : { fillKey: "YEM" },
-        ZMB : { fillKey: "ZMB" },
-        ZWE : { fillKey: "ZWE" }
+        dataYear = parseInt(eval(d3.select(this).property('value')));
+        updateMap(dataFilter, dataYear)
 
-      },
-      geographyConfig: {
-        highlightFillColor: '#217ABF',
-        highlightBorderColor: '#183B73',
-      },
-      done: function(datamap) {
-        datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+      });
 
-          map.selectedCountry(geography.properties.name);
-        });
-      }
-    });
+      // handle on click event for filter drop-down
+      d3.select('#gradient')
+      .on('change', function() {
 
-var config6 = liquidFillGaugeDefaultSettingsAlc();
-config6.waveTextColor = "blue";
-config6.textVertPosition = -0.3 ;
-config6.waveAnimateTime = 1000;
+        dataFilter = eval(d3.select(this).property('value'));
+        updateMap(dataFilter, dataYear)
+      
+      });
 
-<!--Female definition-->
-var config3 = liquidFillGaugeDefaultSettingsFe();
-config3.waveTextColor = "red";
-config3.textVertPosition = -0.3 ;
-config3.waveAnimateTime = 1000;
-<!--Male definition-->
-var config1 = liquidFillGaugeDefaultSettings();
-config1.waveTextColor = "red";
-config1.textVertPosition = -0.3 ;
-config1.waveAnimateTime = 1000;
-
-map.addPlugin('selectedCountry', function(layer, country) {
-
-  var svgNS = "http://www.w3.org/2000/svg";
-
-  var  use = document.createElementNS(svgNS, "g");
-
-  use.setAttribute("id", "mainSVG")
-  use.setAttribute("width", SVGwidth)
-  use.setAttribute("height", SVGheight)
-  use.setAttribute("fill", "white")
-  use.setAttribute("opacity", "1")
-  use.setAttribute("transform", "translate(120,120)")
-
-  document.getElementsByClassName("datamap")[0].appendChild(use)
-
-  d3.xml("images/cross.svg", "image/svg+xml", function(closeSVG) {
-
-    closeSVG.documentElement.setAttribute("fill", "black")
-    closeSVG.documentElement.setAttribute("x", SVGwidth-50)
-    closeSVG.documentElement.setAttribute("y", 15)
-    closeSVG.documentElement.setAttribute("cursor", "pointer")
-    closeSVG.documentElement.addEventListener("click",function(evt){
-      document.getElementById("mainSVG").remove()
-    },
-    false)
-
-    document.getElementById("mainSVG").appendChild(closeSVG.documentElement);
-  });
-
-  d3.selectAll('#mainSVG').append("rect")
-  .attr("width", SVGwidth)
-  .attr("height", SVGheight)
-  .attr("rx", 20)
-  .attr("ry", 20)
-  .attr("fill", "#FFFFD9")
-  .style("stroke", "orange")
-  .style("stroke-width", 2)
-
-   //Others   
-   displayOthers(year,country);   
-   
-   <!-- Wordcloud-->
-   wordCloud(year,country)    
-
-   <!--Life expectancy-->
-   var LEmale = getValueLEMale(year,country);
-   var LEfemale = getValueLEFemale(year,country);
-
-   <!--Alcohol consumption-->
-   var alcohol = getValue(year,country);
-   <!--Body Mass Index-->
-   var BMImale = getValueMale(year,country);
-   var BMIfemale = getValueFemale(year,country);
-
- });
+    getValueYearlyAlc(dataYear, function(value) {map = value});
 }
-</script>
 
+function updateMap(gradient, year) {
+    
+  switch(gradient) {
+    case "alcohol":
+      
+      getValueYearlyAlc(dataYear, function(value) {
+        map = value
+        document.getElementsByClassName("datamap")[0].remove()
+      });
+      break;
+    case "bmiMale":
+      
+      getYearlyBMIValueMale(dataYear, function(value) {
+        map = value
+        document.getElementsByClassName("datamap")[0].remove()
+      });
+      break;
+    case "bmiFemale":
 
+      getYearlyBMIValueFemale(dataYear, function(value) {
+        map = value
+        document.getElementsByClassName("datamap")[0].remove()
+      });
+      break;
+    case "leMale":
+
+      getYearlyValueLEMale(dataYear, function(value) {
+        map = value
+        document.getElementsByClassName("datamap")[0].remove()
+      });
+      break;
+    case "leFemale":
+
+      getYearlyValueLEFemale(dataYear, function(value) {
+        map = value
+        document.getElementsByClassName("datamap")[0].remove()
+      });
+      break;
+  }
+}
+  </script>
 </body>
 </html>

@@ -1,3 +1,16 @@
+<!--Female definition-->
+var config3 = liquidFillGaugeDefaultSettingsFe();
+config3.waveTextColor = "red";
+config3.textVertPosition = -0.3 ;
+config3.waveAnimateTime = 1000;
+
+<!--Male definition-->
+var config1 = liquidFillGaugeDefaultSettings();
+config1.waveTextColor = "red";
+config1.textVertPosition = -0.3 ;
+config1.waveAnimateTime = 1000;
+
+
 function getValueFemale(year,country){
 if (year<=2010) {
 	year=2010;
