@@ -21,7 +21,7 @@ function getValueYearlyAlc(year, callback){
 
   var max = d3.max(filteredYear, function(d) { return +d[year];} );
 
-  var gradientColors = d3.scale.linear().domain([0,max]).range(["#b4d8fe","#023f7d"]);
+  var gradientColors = d3.scale.linear().domain([0,max]).range(["#cde5fe","#01264b"]);
 
   filteredYear.forEach(function(d) { 
    d[year] = gradientColors(d[year]);
@@ -53,7 +53,7 @@ d3.csv("HNP_Data_LifeExpectancy.csv", function(data) {
 
   var max = d3.max(filteredYear, function(d) { return +d[year];} );
 
-  var gradientColors = d3.scale.linear().domain([0,max]).range(["#b4d8fe","#023f7d"]);
+  var gradientColors = d3.scale.linear().domain([0,max]).range(["#ffffff","#01264b"]);
 
   filteredYear.forEach(function(d) { 
    d[year] = gradientColors(d[year]);
@@ -85,7 +85,7 @@ d3.csv("HNP_Data_LifeExpectancy.csv", function(data) {
 
   var max = d3.max(filteredYear, function(d) { return +d[year];} );
   console.log("max: " + max)
-  var gradientColors = d3.scale.linear().domain([0,max]).range(["#b4d8fe","#023f7d"]);
+  var gradientColors = d3.scale.linear().domain([0,max]).range(["#ffffff","#01264b"]);
 
   filteredYear.forEach(function(d) { 
    d[year] = gradientColors(d[year]);
@@ -125,7 +125,7 @@ d3.csv("xmart.csv", function(data) {
 
     var max = d3.max(filteredYear, function(d) { return +d[year];} );
   console.log("max: " + max)
-  var gradientColors = d3.scale.linear().domain([0,max]).range(["#b4d8fe","#023f7d"]);
+  var gradientColors = d3.scale.linear().domain([0,max]).range(["#ffffff","#01264b"]);
 
   filteredYear.forEach(function(d) { 
    d[year] = gradientColors(d[year]);
@@ -166,7 +166,7 @@ d3.csv("xmart.csv", function(data) {
 
     var max = d3.max(filteredYear, function(d) { return +d[year];} );
 
-    var gradientColors = d3.scale.linear().domain([0,max]).range(["#b4d8fe","#023f7d"]);
+    var gradientColors = d3.scale.linear().domain([0,max]).range(["#ffffff","#01264b"]);
 
     filteredYear.forEach(function(d) { 
     d[year] = gradientColors(d[year]);
@@ -185,7 +185,7 @@ function generateMap(filteredYear, year) {
       element: document.getElementById("container"),
       projection: 'mercator',
       fills: {
-        //UNCOMMENT AFTER DEBUGGING defaultFill: "#b4d8fe",
+        //UNCOMMENT AFTER DEBUGGING defaultFill: "#cde5fe",
         ARB : getColor(filteredYear, "Arab World", year),
         CSS : getColor(filteredYear, "Caribbean small states", year),
         CEB : getColor(filteredYear, "Central Europe and the Baltics", year),
@@ -262,10 +262,10 @@ function generateMap(filteredYear, year) {
         CHN : getColor(filteredYear, "China", year),
         COL : getColor(filteredYear, "Colombia", year),
         COM : getColor(filteredYear, "Comoros", year),
-        ZAR : getColor(filteredYear, "Congo, Dem. Rep.", year),
-        COG : getColor(filteredYear, "Congo, Rep.", year),
+        COD : getColor(filteredYear, "Democratic Republic of the Congo", year),
+        COG : getColor(filteredYear, "Republic of the Congo", year),
         CRI : getColor(filteredYear, "Costa Rica", year),
-        CIV : getColor(filteredYear, "Cote d'Ivoire", year),
+        CIV : getColor(filteredYear, "Ivory Coast", year),
         HRV : getColor(filteredYear, "Croatia", year),
         CUB : getColor(filteredYear, "Cuba", year),
         CUW : getColor(filteredYear, "Curacao", year),
@@ -276,7 +276,7 @@ function generateMap(filteredYear, year) {
         DMA : getColor(filteredYear, "Dominica", year),
         DOM : getColor(filteredYear, "Dominican Republic", year),
         ECU : getColor(filteredYear, "Ecuador", year),
-        EGY : getColor(filteredYear, "Egypt, Arab Rep.", year),
+        EGY : getColor(filteredYear, "Egypt", year),
         SLV : getColor(filteredYear, "El Salvador", year),
         GNQ : getColor(filteredYear, "Equatorial Guinea", year),
         ERI : getColor(filteredYear, "Eritrea", year),
@@ -299,7 +299,7 @@ function generateMap(filteredYear, year) {
         GTM : getColor(filteredYear, "Guatemala", year),
         GIN : getColor(filteredYear, "Guinea", year),
         GNB : getColor(filteredYear, "Guinea-Bissau", year),
-        GUY : getColor(filteredYear, "Guyana", year),
+        GUY : getColor(filteredYear, "French Guiana", year),
         HTI : getColor(filteredYear, "Haiti", year),
         HND : getColor(filteredYear, "Honduras", year),
         HKG : getColor(filteredYear, "Hong Kong SAR, China", year),
@@ -307,7 +307,7 @@ function generateMap(filteredYear, year) {
         ISL : getColor(filteredYear, "Greenland", year),
         IND : getColor(filteredYear, "India", year),
         IDN : getColor(filteredYear, "Indonesia", year),
-        IRN : getColor(filteredYear, "Iran, Islamic Rep.", year),
+        IRN : getColor(filteredYear, "Iran", year),
         IRQ : getColor(filteredYear, "Iraq", year),
         IRL : getColor(filteredYear, "Ireland", year),
         IMY : getColor(filteredYear, "Isle of Man", year),
@@ -319,12 +319,12 @@ function generateMap(filteredYear, year) {
         KAZ : getColor(filteredYear, "Kazakhstan", year),
         KEN : getColor(filteredYear, "Kenya", year),
         KIR : getColor(filteredYear, "Kiribati", year),
-        PRK : getColor(filteredYear, "Korea, Dem. Rep.", year),
-        KOR : getColor(filteredYear, "Korea, Rep.", year),
+        PRK : getColor(filteredYear, "North Korea", year),
+        KOR : getColor(filteredYear, "South Korea", year),
         KSV : getColor(filteredYear, "Kosovo", year),
         KWT : getColor(filteredYear, "Kuwait", year),
-        KGZ : getColor(filteredYear, "Kyrgyz Republic", year),
-        LAO : getColor(filteredYear, "Lao PDR", year),
+        KGZ : getColor(filteredYear, "Kyrgyzstan", year),
+        LAO : getColor(filteredYear, "Laos", year),
         LVA : getColor(filteredYear, "Latvia", year),
         LBN : getColor(filteredYear, "Lebanon", year),
         LSO : getColor(filteredYear, "Lesotho", year),
@@ -334,7 +334,7 @@ function generateMap(filteredYear, year) {
         LTU : getColor(filteredYear, "Lithuania", year),
         LUX : getColor(filteredYear, "Luxembourg", year),
         MAC : getColor(filteredYear, "Macao SAR, China", year),
-        MKD : getColor(filteredYear, "Macedonia, FYR", year),
+        MKD : getColor(filteredYear, "Macedonia", year),
         MDG : getColor(filteredYear, "Madagascar", year),
         MWI : getColor(filteredYear, "Malawi", year),
         MYS : getColor(filteredYear, "Malaysia", year),
@@ -375,7 +375,7 @@ function generateMap(filteredYear, year) {
         PRT : getColor(filteredYear, "Portugal", year),
         PRI : getColor(filteredYear, "Puerto Rico", year),
         QAT : getColor(filteredYear, "Qatar", year),
-        ROM : getColor(filteredYear, "Romania", year),
+        ROU : getColor(filteredYear, "Romania", year),
         RUS : getColor(filteredYear, "Russia", year),
         RWA : getColor(filteredYear, "Rwanda", year),
         WSM : getColor(filteredYear, "Samoa", year),
@@ -388,7 +388,7 @@ function generateMap(filteredYear, year) {
         SLE : getColor(filteredYear, "Sierra Leone", year),
         SGP : getColor(filteredYear, "Singapore", year),
         SXM : getColor(filteredYear, "Sint Maarten (Dutch part)", year),
-        SVK : getColor(filteredYear, "Slovak Republic", year),
+        SVK : getColor(filteredYear, "Slovakia", year),
         SVN : getColor(filteredYear, "Slovenia", year),
         SLB : getColor(filteredYear, "Solomon Islands", year),
         SOM : getColor(filteredYear, "Somalia", year),
@@ -405,9 +405,9 @@ function generateMap(filteredYear, year) {
         SWZ : getColor(filteredYear, "Swaziland", year),
         SWE : getColor(filteredYear, "Sweden", year),
         CHE : getColor(filteredYear, "Switzerland", year),
-        SYR : getColor(filteredYear, "Syrian Arab Republic", year),
+        SYR : getColor(filteredYear, "Syria", year),
         TJK : getColor(filteredYear, "Tajikistan", year),
-        TZA : getColor(filteredYear, "Tanzania", year),
+        TZA : getColor(filteredYear, "United Republic of Tanzania", year),
         THA : getColor(filteredYear, "Thailand", year),
         TMP : getColor(filteredYear, "Timor-Leste", year),
         TGO : getColor(filteredYear, "Togo", year),
@@ -422,20 +422,22 @@ function generateMap(filteredYear, year) {
         UKR : getColor(filteredYear, "Ukraine", year),
         ARE : getColor(filteredYear, "United Arab Emirates", year),
         GBR : getColor(filteredYear, "United Kingdom", year),
-        USA : getColor(filteredYear, "USA", year),
+        USA : getColor(filteredYear, "United States of America", year),
         URY : getColor(filteredYear, "Uruguay", year),
         UZB : getColor(filteredYear, "Uzbekistan", year),
         VUT : getColor(filteredYear, "Vanuatu", year),
-        VEN : getColor(filteredYear, "Venezuela, RB", year),
+        VEN : getColor(filteredYear, "Venezuela", year),
         VNM : getColor(filteredYear, "Vietnam", year),
         VIR : getColor(filteredYear, "Virgin Islands (U.S.)", year),
         WBG : getColor(filteredYear, "West Bank and Gaza", year),
-        YEM : getColor(filteredYear, "Yemen, Rep.", year),
+        YEM : getColor(filteredYear, "Yemen", year),
         ZMB : getColor(filteredYear, "Zambia", year),
+        KOS : getColor(filteredYear, "Kosovo", year),
         ZWE : getColor(filteredYear, "Zimbabwe", year)
     },
     data: {
         ARB : { fillKey: "ARB" },
+        KOS : { fillKey: "KOS" },
         CSS : { fillKey: "CSS" },
         CEB : { fillKey: "CEB" },
         EAS : { fillKey: "EAS" },
@@ -511,7 +513,7 @@ function generateMap(filteredYear, year) {
         CHN : { fillKey: "CHN" },
         COL : { fillKey: "COL" },
         COM : { fillKey: "COM" },
-        ZAR : { fillKey: "ZAR" },
+        COD : { fillKey: "COD" },
         COG : { fillKey: "COG" },
         CRI : { fillKey: "CRI" },
         CIV : { fillKey: "CIV" },
@@ -624,7 +626,7 @@ function generateMap(filteredYear, year) {
         PRT : { fillKey: "PRT" },
         PRI : { fillKey: "PRI" },
         QAT : { fillKey: "QAT" },
-        ROM : { fillKey: "ROM" },
+        ROU : { fillKey: "ROU" },
         RUS : { fillKey: "RUS" },
         RWA : { fillKey: "RWA" },
         WSM : { fillKey: "WSM" },
