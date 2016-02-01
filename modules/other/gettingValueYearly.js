@@ -185,7 +185,7 @@ function generateMap(filteredYear, year) {
       element: document.getElementById("container"),
       projection: 'mercator',
       fills: {
-        //UNCOMMENT AFTER DEBUGGING defaultFill: "#cde5fe",
+        defaultFill: "#cde5fe",
         ARB : getColor(filteredYear, "Arab World", year),
         CSS : getColor(filteredYear, "Caribbean small states", year),
         CEB : getColor(filteredYear, "Central Europe and the Baltics", year),

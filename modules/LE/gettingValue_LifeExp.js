@@ -18,8 +18,7 @@ var filteredAvg;
         return +d[year];
         } 
     });
-   var avg = Math.round(d3.mean(filteredAvg, function(d) { return +d[year];} )*10)/10; 
-   //console.log("Average " +avg);    
+   var avg = Math.round(d3.mean(filteredAvg, function(d) { return +d[year];} )*10)/10;     
     
 //Filtering data
          
@@ -60,7 +59,7 @@ d3.csv("HNP_Data_LifeExpectancy.csv", function(data) {
         } 
     });
    var avg = Math.round(d3.mean(filteredAvg, function(d) { return +d[year];} )*10)/10; 
-   //console.log("Average " +avg);
+
 //Filtering data
          
     filteredData = data.filter(function(d) { 
